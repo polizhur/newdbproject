@@ -87,3 +87,10 @@ async function getImportantItems() {
 }
 
 getImportantItems().then((TodoItems) => console.log(TodoItems));
+
+// async function importantTodos() {
+//     const todos = await TodoItem.findAll({ where: { important: true } });
+//     return todos.map(todo => todo.get({ plain: true }));
+//   }
+
+//   importantTodos().then(result => console.log(result));

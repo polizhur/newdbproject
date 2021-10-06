@@ -1,37 +1,28 @@
 const express = require("express");
+//Create a new express server named app.
+const TodoItem = require("./models").todoitem;
 const app = express();
+//Import express and the router
+const router = require("./routers/router");
 const PORT = 4000;
 
+//Register the router with app.use
+app.use(router);
+
 const User = require("./models").user;
+const TodoList = require("./models").todolist;
 
-app.use(express.json());
+//import router
+const users = require("./routers/usersRouter");
+const lists = require("./routers/listsRouter");
 
-app.post("/users", async (req, res, next) => {
-  try {
-    const email = req.body.email;
-    if (!email || email === " ") {
-      res.status(400).send("Must provide an email address");
-    } else {
-      const user = await User.create(req.body);
-      res.json(user);
-    }
-  } catch (e) {
-    next(e);
-  }
-});
+//middleware
+app.use(express.json()); //parsing the body for POST and PUT requests
 
-app.get("/users/:userId", async (req, res, next) => {
-  try {
-    const userId = parseInt(req.params.userId);
-    const user = await User.findByPk(userId);
-    if (!user) {
-      res.status(400).send("User not found");
-    } else {
-      res.json(user);
-    }
-  } catch (e) {
-    next(e);
-  }
-});
+router.get("/", (request, response) => response.send("separated"));
+
+app.use(users);
+app.use(lists);
 
 app.listen(PORT);
+//app.listen(PORT, () => console.log(`Server started in port: ${PORT}`));
